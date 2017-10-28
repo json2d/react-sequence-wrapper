@@ -12,19 +12,26 @@ npm install react-sequence-wrapper --save-dev
 
 ## Usage
 
-Here's an example of using `sequence` decorator with the `steps` option to wrap a component and provide it with `props` to implement a basic wizard with forward and backwards navigation.
+Here's an example of using `sequence` decorator with the `steps` option to wrap a component and provide it with `props` to implement a basic wizard with forward and backwards navigation:
+
+[![Edit react-sequence-wrapper@0.1.1](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/6jqrp3o5wk?module=%2FWizard.js)
 
 ```javascript
 import React, { Component } from "react";
 import { Label, Button } from "react-bootstrap";
-import sequence from "./react-sequence-wrapper";
+import sequence from "react-sequence-wrapper";
 
 @sequence({
   steps: ["Greet", "Compliment", "Leave"]
 })
-export default class BasicWizard extends Component {
-
+export default class WizardForm extends Component {
   render() {
+    const stepComponents = [
+      <div>hello world!</div>,
+      <div>nice shirt!</div>,
+      <div>goodbye!</div>
+    ];
+
     const {
       currentStepIndex,
       currentStep,
@@ -35,33 +42,42 @@ export default class BasicWizard extends Component {
       isFirstStep,
       isLastStep,
       steps
-    } = this.props; //all provided by @sequence
-
-    const stepComponents = [
-      <div>hello world!</div>,
-      <div>nice shirt!</div>,
-      <div>goodbye!</div>
-    ];
-
+    } = this.props; //all from @sequence
     return (
       <div>
-        <h2>
-          <Label>
-            {currentStepIndex + 1}. {currentStep}
-          </Label>
-        </h2>
+        <div id="header">
+          <h2>
+            <Label bsStyle="success">
+              {currentStepIndex + 1}. {steps[currentStepIndex]}
+            </Label>
+          </h2>
+        </div>
 
-        <div>
+        <div id="step">
           {stepComponents[currentStepIndex]}
+        </div>
 
-          <div id="navigation">
-            <Button onClick={prevStep} disabled={isFirstStep}>
-              Back
+        <div id="basic-navigation">
+          <Button onClick={prevStep} disabled={isFirstStep}>
+            Back
+          </Button>
+          <Button bsStyle="primary" onClick={nextStep} disabled={isLastStep}>
+            Next
+          </Button>
+        </div>
+
+        <div id="steps-navigation">
+          <h5>Steps Navigator</h5>
+
+          {steps.map((step, index) => (
+            <Button
+              onClick={() => setStepIndex(index)}
+              disabled={currentStepIndex == index}
+              bsStyle={currentStepIndex == index ? "success" : "default"}
+            >
+              {index + 1}.{step}
             </Button>
-            <Button onClick={nextStep} disabled={isLastStep}>
-              Next
-            </Button>
-          </div>
+          ))}
         </div>
       </div>
     );

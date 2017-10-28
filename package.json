@@ -1,6 +1,6 @@
 {
   "name": "react-sequence-wrapper",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "a higher order component decorator providing state management for components that use a sequence of steps, like wizards and other multiple-step user interfaces.",
   "main": "lib/react-sequence-wrapper.js",
   "scripts": {
